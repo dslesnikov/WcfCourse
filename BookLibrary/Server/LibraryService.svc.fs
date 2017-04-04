@@ -37,27 +37,31 @@ type LibraryService() =
             _bookStorage.Books <- (book::_bookStorage.Books)
 
         member x.GetBook bookId =
-            let rec findBook (bookId:int) (bookList:list<Book>) : Book =
-                match bookList with
-                | [] -> null
-                | (bookHead::bookTail) ->
-                    let id = bookHead.Id
-                    match id with
-                    | x when x = bookId -> bookHead
-                    | _ -> findBook bookId bookTail
-            findBook bookId _bookStorage.Books
+            _bookStorage.Books
+            |> List.tryFind (fun book -> book.Id = bookId )
+            |> function None -> null | Some book -> book
 
         member x.GetBooks authorName =
-            let rec findBook (authorName:string) (bookList:list<Book>) (aggregator:list<Book>) : list<Book> =
-                match bookList with
-                | [] -> aggregator
-                | (bookHead::bookTail) ->
-                    let currentAuthorName = bookHead.Author
-                    match currentAuthorName with
-                    | x when x = authorName ->
-                        findBook authorName bookTail (bookHead::aggregator)
-                    | _ -> findBook authorName bookTail aggregator
-            Seq.cast (findBook authorName _bookStorage.Books [])
+            _bookStorage.Books
+            |> List.filter (fun book -> book.Author = authorName)
+            |> Seq.cast
 
-        member x.TakeBook bookId = ()
-        member x.ReturnBook bookId = ()
+        member x.TakeBook bookId =
+            _bookStorage.Books 
+                |> List.tryFind (fun book -> book.Id = bookId)
+                |> function
+                    | None -> failwith "Book was not found"
+                    | Some book ->
+                        match book.Taken with
+                        | true -> failwith "Book is already taken"
+                        | _ -> book.Taken <- true
+
+        member x.ReturnBook bookId =
+            _bookStorage.Books
+                |> List.tryFind (fun book -> book.Id = bookId)
+                |> function
+                    | None -> failwith "Book was not found"
+                    | Some book ->
+                        match book.Taken with
+                        | true -> book.Taken <- false
+                        | _ -> failwith "Book was not taken"

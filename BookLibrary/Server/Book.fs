@@ -11,14 +11,14 @@ type public BookType =
     | Other = 3
 
 [<AllowNullLiteral>]
-[<DataContract(Namespace=
-    "http://www.scottseely.com/WCFDemo")>]
+[<DataContract>]
 type public Book() =
     let mutable _id : int = 0
     let mutable _name : string = String.Empty
     let mutable _authorName : string = String.Empty
     let mutable _publishedYear : int = 0
     let mutable _bookType : BookType = BookType.Scientific
+    let mutable _taken : bool = false
 
     [<DataMember>]
     member public book.Id
@@ -44,3 +44,7 @@ type public Book() =
     member public book.Type
         with get() = _bookType
         and set(value) = _bookType <- value
+
+    member public book.Taken
+        with get() = _taken
+        and set(value) = _taken <- value

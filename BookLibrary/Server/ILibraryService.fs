@@ -4,8 +4,7 @@ open System.Runtime.Serialization
 open System.ServiceModel
 
 
-[<ServiceContract(Namespace=
-    "http://www.scottseely.com/WCFDemo")>]
+[<ServiceContract>]
 type ILibraryService =
     [<OperationContract>]
     abstract AddBook: book:Book -> unit
