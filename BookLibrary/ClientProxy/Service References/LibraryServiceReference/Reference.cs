@@ -35,6 +35,9 @@ namespace ClientProxy.LibraryServiceReference {
         private int PublishYearField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool TakenField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private ClientProxy.LibraryServiceReference.BookType TypeField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -95,6 +98,19 @@ namespace ClientProxy.LibraryServiceReference {
                 if ((this.PublishYearField.Equals(value) != true)) {
                     this.PublishYearField = value;
                     this.RaisePropertyChanged("PublishYear");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Taken {
+            get {
+                return this.TakenField;
+            }
+            set {
+                if ((this.TakenField.Equals(value) != true)) {
+                    this.TakenField = value;
+                    this.RaisePropertyChanged("Taken");
                 }
             }
         }

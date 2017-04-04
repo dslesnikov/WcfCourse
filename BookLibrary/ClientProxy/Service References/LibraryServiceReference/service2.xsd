@@ -6,6 +6,7 @@
       <xs:element minOccurs="0" name="Id" type="xs:int" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PublishYear" type="xs:int" />
+      <xs:element minOccurs="0" name="Taken" type="xs:boolean" />
       <xs:element minOccurs="0" name="Type" type="tns:BookType" />
     </xs:sequence>
   </xs:complexType>

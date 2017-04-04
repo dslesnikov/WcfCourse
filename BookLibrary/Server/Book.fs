@@ -45,6 +45,7 @@ type public Book() =
         with get() = _bookType
         and set(value) = _bookType <- value
 
+    [<DataMember>]
     member public book.Taken
         with get() = _taken
         and set(value) = _taken <- value
