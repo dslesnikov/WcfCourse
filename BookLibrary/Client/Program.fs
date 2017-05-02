@@ -36,5 +36,5 @@ let main argv =
     service.AddBook newBook
     let myBooks = service.GetBooks "Me"
     myBooks |> Array.iter (fun book -> printfn "Book name: %s" book.Name)
-    service.SaveChanges()
+    service.Leave()
     0

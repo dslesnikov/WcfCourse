@@ -61,6 +61,12 @@
   <wsdl:message name="ILibraryService_SaveChanges_OutputMessage">
     <wsdl:part name="parameters" element="tns:SaveChangesResponse" />
   </wsdl:message>
+  <wsdl:message name="ILibraryService_Leave_InputMessage">
+    <wsdl:part name="parameters" element="tns:Leave" />
+  </wsdl:message>
+  <wsdl:message name="ILibraryService_Leave_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LeaveResponse" />
+  </wsdl:message>
   <wsdl:portType msc:usingSession="true" name="ILibraryService">
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="EnterLibrary">
       <wsdl:input wsaw:Action="http://tempuri.org/ILibraryService/EnterLibrary" message="tns:ILibraryService_EnterLibrary_InputMessage" />
@@ -89,6 +95,10 @@
     <wsdl:operation msc:isInitiating="false" msc:isTerminating="true" name="SaveChanges">
       <wsdl:input wsaw:Action="http://tempuri.org/ILibraryService/SaveChanges" message="tns:ILibraryService_SaveChanges_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILibraryService/SaveChangesResponse" message="tns:ILibraryService_SaveChanges_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="true" name="Leave">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILibraryService/Leave" message="tns:ILibraryService_Leave_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILibraryService/LeaveResponse" message="tns:ILibraryService_Leave_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_ILibraryService" type="tns:ILibraryService">
@@ -150,6 +160,15 @@
     </wsdl:operation>
     <wsdl:operation name="SaveChanges">
       <soap12:operation soapAction="http://tempuri.org/ILibraryService/SaveChanges" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Leave">
+      <soap12:operation soapAction="http://tempuri.org/ILibraryService/Leave" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

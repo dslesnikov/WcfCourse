@@ -200,6 +200,12 @@ namespace ClientProxy.LibraryServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(IsTerminating=true, IsInitiating=false, Action="http://tempuri.org/ILibraryService/SaveChanges", ReplyAction="http://tempuri.org/ILibraryService/SaveChangesResponse")]
         System.Threading.Tasks.Task SaveChangesAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(IsTerminating=true, Action="http://tempuri.org/ILibraryService/Leave", ReplyAction="http://tempuri.org/ILibraryService/LeaveResponse")]
+        void Leave();
+        
+        [System.ServiceModel.OperationContractAttribute(IsTerminating=true, Action="http://tempuri.org/ILibraryService/Leave", ReplyAction="http://tempuri.org/ILibraryService/LeaveResponse")]
+        System.Threading.Tasks.Task LeaveAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -283,6 +289,14 @@ namespace ClientProxy.LibraryServiceReference {
         
         public System.Threading.Tasks.Task SaveChangesAsync() {
             return base.Channel.SaveChangesAsync();
+        }
+        
+        public void Leave() {
+            base.Channel.Leave();
+        }
+        
+        public System.Threading.Tasks.Task LeaveAsync() {
+            return base.Channel.LeaveAsync();
         }
     }
 }

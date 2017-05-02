@@ -26,3 +26,6 @@ type ILibraryService =
 
     [<OperationContract(IsInitiating = false, IsTerminating = true)>]
     abstract SaveChanges: unit -> unit
+
+    [<OperationContract(IsTerminating = true)>]
+    abstract Leave: unit -> unit

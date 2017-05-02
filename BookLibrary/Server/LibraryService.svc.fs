@@ -95,3 +95,5 @@ type LibraryService() =
                                 | None -> failwith "Book was not found"
                                 | Some book -> book.Taken <- false
                                                book.TakerInfo <- None) _returnedBooks
+
+        member x.Leave () = ()
