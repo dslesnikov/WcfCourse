@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://localhost:8000/service?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/BookLibrary.Server" />
+  <xs:element name="EnterLibrary">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userId" type="xs:int" />
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EnterLibraryResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="AddBook">
     <xs:complexType>
       <xs:sequence>
@@ -61,6 +74,16 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="ReturnBookResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveChanges">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveChangesResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>

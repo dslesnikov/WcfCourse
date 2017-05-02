@@ -3,14 +3,23 @@ open ClientProxy.LibraryServiceReference
 
 [<EntryPoint>]
 let main argv = 
-    use service = new LibraryServiceClient()
+    let mutable service = new LibraryServiceClient()
+    service.EnterLibrary(0, "Jhon")
     let mutable book = service.GetBook 1
     printfn "Author of the book %s" book.Author
     printfn "Book %d is taken? - %b" 1 book.Taken
     service.TakeBook 1
+    service.SaveChanges()
+
+    service <- new LibraryServiceClient()
+    service.EnterLibrary(0, "Jhon")
     book <- service.GetBook 1
     printfn "Book %d is taken? - %b" 1 book.Taken
     service.ReturnBook 1
+    service.SaveChanges()
+
+    service <- new LibraryServiceClient()
+    service.EnterLibrary(0, "Jhon")
     book <- service.GetBook 1
     printfn "Book %d is taken? - %b" 1 book.Taken
 
@@ -27,4 +36,5 @@ let main argv =
     service.AddBook newBook
     let myBooks = service.GetBooks "Me"
     myBooks |> Array.iter (fun book -> printfn "Book name: %s" book.Name)
+    service.SaveChanges()
     0

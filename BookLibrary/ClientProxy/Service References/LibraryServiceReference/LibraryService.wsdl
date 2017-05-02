@@ -19,6 +19,12 @@
       <xsd:import schemaLocation="http://localhost:8000/service?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/BookLibrary.Server" />
     </xsd:schema>
   </wsdl:types>
+  <wsdl:message name="ILibraryService_EnterLibrary_InputMessage">
+    <wsdl:part name="parameters" element="tns:EnterLibrary" />
+  </wsdl:message>
+  <wsdl:message name="ILibraryService_EnterLibrary_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EnterLibraryResponse" />
+  </wsdl:message>
   <wsdl:message name="ILibraryService_AddBook_InputMessage">
     <wsdl:part name="parameters" element="tns:AddBook" />
   </wsdl:message>
@@ -49,31 +55,54 @@
   <wsdl:message name="ILibraryService_ReturnBook_OutputMessage">
     <wsdl:part name="parameters" element="tns:ReturnBookResponse" />
   </wsdl:message>
-  <wsdl:portType name="ILibraryService">
-    <wsdl:operation name="AddBook">
+  <wsdl:message name="ILibraryService_SaveChanges_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveChanges" />
+  </wsdl:message>
+  <wsdl:message name="ILibraryService_SaveChanges_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveChangesResponse" />
+  </wsdl:message>
+  <wsdl:portType msc:usingSession="true" name="ILibraryService">
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="EnterLibrary">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILibraryService/EnterLibrary" message="tns:ILibraryService_EnterLibrary_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILibraryService/EnterLibraryResponse" message="tns:ILibraryService_EnterLibrary_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="AddBook">
       <wsdl:input wsaw:Action="http://tempuri.org/ILibraryService/AddBook" message="tns:ILibraryService_AddBook_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILibraryService/AddBookResponse" message="tns:ILibraryService_AddBook_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetBook">
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="GetBook">
       <wsdl:input wsaw:Action="http://tempuri.org/ILibraryService/GetBook" message="tns:ILibraryService_GetBook_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILibraryService/GetBookResponse" message="tns:ILibraryService_GetBook_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetBooks">
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="GetBooks">
       <wsdl:input wsaw:Action="http://tempuri.org/ILibraryService/GetBooks" message="tns:ILibraryService_GetBooks_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILibraryService/GetBooksResponse" message="tns:ILibraryService_GetBooks_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="TakeBook">
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="TakeBook">
       <wsdl:input wsaw:Action="http://tempuri.org/ILibraryService/TakeBook" message="tns:ILibraryService_TakeBook_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILibraryService/TakeBookResponse" message="tns:ILibraryService_TakeBook_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="ReturnBook">
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="ReturnBook">
       <wsdl:input wsaw:Action="http://tempuri.org/ILibraryService/ReturnBook" message="tns:ILibraryService_ReturnBook_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILibraryService/ReturnBookResponse" message="tns:ILibraryService_ReturnBook_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="true" name="SaveChanges">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILibraryService/SaveChanges" message="tns:ILibraryService_SaveChanges_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILibraryService/SaveChangesResponse" message="tns:ILibraryService_SaveChanges_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_ILibraryService" type="tns:ILibraryService">
     <wsp:PolicyReference URI="#NetTcpBinding_ILibraryService_policy" />
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="EnterLibrary">
+      <soap12:operation soapAction="http://tempuri.org/ILibraryService/EnterLibrary" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="AddBook">
       <soap12:operation soapAction="http://tempuri.org/ILibraryService/AddBook" style="document" />
       <wsdl:input>
@@ -112,6 +141,15 @@
     </wsdl:operation>
     <wsdl:operation name="ReturnBook">
       <soap12:operation soapAction="http://tempuri.org/ILibraryService/ReturnBook" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveChanges">
+      <soap12:operation soapAction="http://tempuri.org/ILibraryService/SaveChanges" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

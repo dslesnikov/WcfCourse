@@ -4,19 +4,25 @@ open System.Runtime.Serialization
 open System.ServiceModel
 
 
-[<ServiceContract>]
+[<ServiceContract(SessionMode = SessionMode.Required)>]
 type ILibraryService =
-    [<OperationContract>]
+    [<OperationContract(IsInitiating = true, IsTerminating = false)>]
+    abstract EnterLibrary: userId:int -> userName:string -> unit
+
+    [<OperationContract(IsInitiating = false)>]
     abstract AddBook: book:Book -> unit
 
-    [<OperationContract>]
+    [<OperationContract(IsInitiating = false)>]
     abstract GetBook: bookId:int -> Book
 
-    [<OperationContract>]
+    [<OperationContract(IsInitiating = false)>]
     abstract GetBooks: bookAuthor:string -> seq<Book>
 
-    [<OperationContract>]
+    [<OperationContract(IsInitiating = false)>]
     abstract TakeBook: bookId:int -> unit
 
-    [<OperationContract>]
+    [<OperationContract(IsInitiating = false)>]
     abstract ReturnBook: bookId:int -> unit
+
+    [<OperationContract(IsInitiating = false, IsTerminating = true)>]
+    abstract SaveChanges: unit -> unit
