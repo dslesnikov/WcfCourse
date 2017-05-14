@@ -25,6 +25,11 @@ namespace LibraryServiceWeb
         {
             // Add framework services.
             services.AddMvc();
+            services.AddApiVersioning(x =>
+            {
+                x.AssumeDefaultVersionWhenUnspecified = true;
+                x.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,12 +38,7 @@ namespace LibraryServiceWeb
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action}/{id?}");
-            });
+            app.UseMvc();
         }
     }
 }

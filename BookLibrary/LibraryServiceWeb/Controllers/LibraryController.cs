@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryServiceWeb.Controllers
 {
+    [ApiVersion("0.9")]
+    [Route("api/v{version:apiVersion}/library")]
     public class LibraryController : Controller
     {
-        private static readonly BookStorage Storage = new BookStorage();
+        protected static readonly BookStorage Storage = new BookStorage();
 
         [HttpPost]
         public IActionResult Add([FromBody] Book newBook)
@@ -17,6 +19,7 @@ namespace LibraryServiceWeb.Controllers
             return Ok();
         }
 
+        [HttpGet("get/{id}")]
         public IActionResult Get(int id)
         {
             var book = Storage.BookList.FirstOrDefault(x => x.Id == id);
@@ -27,6 +30,7 @@ namespace LibraryServiceWeb.Controllers
             return Ok(book);
         }
 
+        [HttpGet("getall/{authorName}")]
         public IActionResult GetBooks(string authorName)
         {
             var books = Storage.BookList.Where(x => x.Author == authorName);
@@ -37,6 +41,7 @@ namespace LibraryServiceWeb.Controllers
             return Ok(books);
         }
 
+        [HttpGet("take/{id}"), MapToApiVersion("0.9")]
         public IActionResult Take(UserInfo userInfo, int id)
         {
             var book = Storage.BookList.FirstOrDefault(x => x.Id == id);
@@ -54,7 +59,8 @@ namespace LibraryServiceWeb.Controllers
             return Ok(book);
         }
 
-        public IActionResult Return(UserInfo userInfo, int id)
+        [HttpGet("return/{id}")]
+        public virtual IActionResult Return(UserInfo userInfo, int id)
         {
             var book = Storage.BookList.FirstOrDefault(x => x.Id == id);
             if (book == null)
@@ -64,6 +70,32 @@ namespace LibraryServiceWeb.Controllers
             if (!book.Taken || book.TakerInfo.Id != userInfo.Id)
             {
                 return BadRequest();
+            }
+            book.Taken = false;
+            book.TakerInfo = null;
+            return Ok();
+        }
+    }
+
+    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
+    [Route("api/v{version:apiVersion}/library/")]
+    public class LibraryControllerNew : LibraryController
+    {
+        [HttpGet("take/{id}/{userId}")]
+        public IActionResult Take(int id, int userId)
+        {
+            var userInfo = new UserInfo {Id = userId};
+            return Take(userInfo, id);
+        }
+
+        [HttpGet("return/{id}"), MapToApiVersion("2.0")]
+        public IActionResult Return(int id)
+        {
+            var book = Storage.BookList.FirstOrDefault(x => x.Id == id);
+            if (book == null)
+            {
+                return NotFound();
             }
             book.Taken = false;
             book.TakerInfo = null;
