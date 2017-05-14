@@ -16,7 +16,7 @@
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://localhost:8000/service?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://localhost:8000/service?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost:8000/service?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/BookLibrary.Server" />
+      <xsd:import schemaLocation="http://localhost:8000/service?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Server" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="ILibraryService_EnterLibrary_InputMessage">
@@ -58,14 +58,11 @@
   <wsdl:message name="ILibraryService_SaveChanges_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveChanges" />
   </wsdl:message>
-  <wsdl:message name="ILibraryService_SaveChanges_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaveChangesResponse" />
-  </wsdl:message>
   <wsdl:message name="ILibraryService_Leave_InputMessage">
     <wsdl:part name="parameters" element="tns:Leave" />
   </wsdl:message>
-  <wsdl:message name="ILibraryService_Leave_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LeaveResponse" />
+  <wsdl:message name="ILibraryService_OnSaveChanges_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnSaveChanges" />
   </wsdl:message>
   <wsdl:portType msc:usingSession="true" name="ILibraryService">
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="EnterLibrary">
@@ -92,13 +89,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/ILibraryService/ReturnBook" message="tns:ILibraryService_ReturnBook_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILibraryService/ReturnBookResponse" message="tns:ILibraryService_ReturnBook_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation msc:isInitiating="false" msc:isTerminating="true" name="SaveChanges">
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="SaveChanges">
       <wsdl:input wsaw:Action="http://tempuri.org/ILibraryService/SaveChanges" message="tns:ILibraryService_SaveChanges_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/ILibraryService/SaveChangesResponse" message="tns:ILibraryService_SaveChanges_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation msc:isInitiating="true" msc:isTerminating="true" name="Leave">
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="true" name="Leave">
       <wsdl:input wsaw:Action="http://tempuri.org/ILibraryService/Leave" message="tns:ILibraryService_Leave_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/ILibraryService/LeaveResponse" message="tns:ILibraryService_Leave_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="OnSaveChanges">
+      <wsdl:output wsaw:Action="http://tempuri.org/ILibraryService/OnSaveChanges" message="tns:ILibraryService_OnSaveChanges_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_ILibraryService" type="tns:ILibraryService">
@@ -163,15 +161,15 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="Leave">
       <soap12:operation soapAction="http://tempuri.org/ILibraryService/Leave" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="OnSaveChanges">
+      <soap12:operation soapAction="http://tempuri.org/ILibraryService/OnSaveChanges" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

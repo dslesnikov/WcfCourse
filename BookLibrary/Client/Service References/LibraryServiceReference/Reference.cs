@@ -8,14 +8,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ClientProxy.LibraryServiceReference {
+namespace Client.LibraryServiceReference {
     using System.Runtime.Serialization;
     using System;
     
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Book", Namespace="http://schemas.datacontract.org/2004/07/BookLibrary.Server")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Book", Namespace="http://schemas.datacontract.org/2004/07/Server")]
     [System.SerializableAttribute()]
     public partial class Book : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -38,7 +38,7 @@ namespace ClientProxy.LibraryServiceReference {
         private bool TakenField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ClientProxy.LibraryServiceReference.BookType TypeField;
+        private Client.LibraryServiceReference.BookType TypeField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -116,7 +116,7 @@ namespace ClientProxy.LibraryServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public ClientProxy.LibraryServiceReference.BookType Type {
+        public Client.LibraryServiceReference.BookType Type {
             get {
                 return this.TypeField;
             }
@@ -139,7 +139,7 @@ namespace ClientProxy.LibraryServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BookType", Namespace="http://schemas.datacontract.org/2004/07/BookLibrary.Server")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BookType", Namespace="http://schemas.datacontract.org/2004/07/Server")]
     public enum BookType : int {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
@@ -156,7 +156,7 @@ namespace ClientProxy.LibraryServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="LibraryServiceReference.ILibraryService", SessionMode=System.ServiceModel.SessionMode.Required)]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="LibraryServiceReference.ILibraryService", CallbackContract=typeof(Client.LibraryServiceReference.ILibraryServiceCallback), SessionMode=System.ServiceModel.SessionMode.Required)]
     public interface ILibraryService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILibraryService/EnterLibrary", ReplyAction="http://tempuri.org/ILibraryService/EnterLibraryResponse")]
@@ -166,22 +166,22 @@ namespace ClientProxy.LibraryServiceReference {
         System.Threading.Tasks.Task EnterLibraryAsync(int userId, string userName);
         
         [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/ILibraryService/AddBook", ReplyAction="http://tempuri.org/ILibraryService/AddBookResponse")]
-        void AddBook(ClientProxy.LibraryServiceReference.Book book);
+        void AddBook(Client.LibraryServiceReference.Book book);
         
         [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/ILibraryService/AddBook", ReplyAction="http://tempuri.org/ILibraryService/AddBookResponse")]
-        System.Threading.Tasks.Task AddBookAsync(ClientProxy.LibraryServiceReference.Book book);
+        System.Threading.Tasks.Task AddBookAsync(Client.LibraryServiceReference.Book book);
         
         [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/ILibraryService/GetBook", ReplyAction="http://tempuri.org/ILibraryService/GetBookResponse")]
-        ClientProxy.LibraryServiceReference.Book GetBook(int bookId);
+        Client.LibraryServiceReference.Book GetBook(int bookId);
         
         [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/ILibraryService/GetBook", ReplyAction="http://tempuri.org/ILibraryService/GetBookResponse")]
-        System.Threading.Tasks.Task<ClientProxy.LibraryServiceReference.Book> GetBookAsync(int bookId);
+        System.Threading.Tasks.Task<Client.LibraryServiceReference.Book> GetBookAsync(int bookId);
         
         [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/ILibraryService/GetBooks", ReplyAction="http://tempuri.org/ILibraryService/GetBooksResponse")]
-        ClientProxy.LibraryServiceReference.Book[] GetBooks(string bookAuthor);
+        Client.LibraryServiceReference.Book[] GetBooks(string authorName);
         
         [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/ILibraryService/GetBooks", ReplyAction="http://tempuri.org/ILibraryService/GetBooksResponse")]
-        System.Threading.Tasks.Task<ClientProxy.LibraryServiceReference.Book[]> GetBooksAsync(string bookAuthor);
+        System.Threading.Tasks.Task<Client.LibraryServiceReference.Book[]> GetBooksAsync(string authorName);
         
         [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/ILibraryService/TakeBook", ReplyAction="http://tempuri.org/ILibraryService/TakeBookResponse")]
         void TakeBook(int bookId);
@@ -195,44 +195,52 @@ namespace ClientProxy.LibraryServiceReference {
         [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/ILibraryService/ReturnBook", ReplyAction="http://tempuri.org/ILibraryService/ReturnBookResponse")]
         System.Threading.Tasks.Task ReturnBookAsync(int bookId);
         
-        [System.ServiceModel.OperationContractAttribute(IsTerminating=true, IsInitiating=false, Action="http://tempuri.org/ILibraryService/SaveChanges", ReplyAction="http://tempuri.org/ILibraryService/SaveChangesResponse")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsInitiating=false, Action="http://tempuri.org/ILibraryService/SaveChanges")]
         void SaveChanges();
         
-        [System.ServiceModel.OperationContractAttribute(IsTerminating=true, IsInitiating=false, Action="http://tempuri.org/ILibraryService/SaveChanges", ReplyAction="http://tempuri.org/ILibraryService/SaveChangesResponse")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsInitiating=false, Action="http://tempuri.org/ILibraryService/SaveChanges")]
         System.Threading.Tasks.Task SaveChangesAsync();
         
-        [System.ServiceModel.OperationContractAttribute(IsTerminating=true, Action="http://tempuri.org/ILibraryService/Leave", ReplyAction="http://tempuri.org/ILibraryService/LeaveResponse")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsTerminating=true, IsInitiating=false, Action="http://tempuri.org/ILibraryService/Leave")]
         void Leave();
         
-        [System.ServiceModel.OperationContractAttribute(IsTerminating=true, Action="http://tempuri.org/ILibraryService/Leave", ReplyAction="http://tempuri.org/ILibraryService/LeaveResponse")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsTerminating=true, IsInitiating=false, Action="http://tempuri.org/ILibraryService/Leave")]
         System.Threading.Tasks.Task LeaveAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface ILibraryServiceChannel : ClientProxy.LibraryServiceReference.ILibraryService, System.ServiceModel.IClientChannel {
+    public interface ILibraryServiceCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILibraryService/OnSaveChanges")]
+        void OnSaveChanges();
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface ILibraryServiceChannel : Client.LibraryServiceReference.ILibraryService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class LibraryServiceClient : System.ServiceModel.ClientBase<ClientProxy.LibraryServiceReference.ILibraryService>, ClientProxy.LibraryServiceReference.ILibraryService {
+    public partial class LibraryServiceClient : System.ServiceModel.DuplexClientBase<Client.LibraryServiceReference.ILibraryService>, Client.LibraryServiceReference.ILibraryService {
         
-        public LibraryServiceClient() {
+        public LibraryServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
         }
         
-        public LibraryServiceClient(string endpointConfigurationName) : 
-                base(endpointConfigurationName) {
+        public LibraryServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
         }
         
-        public LibraryServiceClient(string endpointConfigurationName, string remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public LibraryServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public LibraryServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public LibraryServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public LibraryServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(binding, remoteAddress) {
+        public LibraryServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
         }
         
         public void EnterLibrary(int userId, string userName) {
@@ -243,28 +251,28 @@ namespace ClientProxy.LibraryServiceReference {
             return base.Channel.EnterLibraryAsync(userId, userName);
         }
         
-        public void AddBook(ClientProxy.LibraryServiceReference.Book book) {
+        public void AddBook(Client.LibraryServiceReference.Book book) {
             base.Channel.AddBook(book);
         }
         
-        public System.Threading.Tasks.Task AddBookAsync(ClientProxy.LibraryServiceReference.Book book) {
+        public System.Threading.Tasks.Task AddBookAsync(Client.LibraryServiceReference.Book book) {
             return base.Channel.AddBookAsync(book);
         }
         
-        public ClientProxy.LibraryServiceReference.Book GetBook(int bookId) {
+        public Client.LibraryServiceReference.Book GetBook(int bookId) {
             return base.Channel.GetBook(bookId);
         }
         
-        public System.Threading.Tasks.Task<ClientProxy.LibraryServiceReference.Book> GetBookAsync(int bookId) {
+        public System.Threading.Tasks.Task<Client.LibraryServiceReference.Book> GetBookAsync(int bookId) {
             return base.Channel.GetBookAsync(bookId);
         }
         
-        public ClientProxy.LibraryServiceReference.Book[] GetBooks(string bookAuthor) {
-            return base.Channel.GetBooks(bookAuthor);
+        public Client.LibraryServiceReference.Book[] GetBooks(string authorName) {
+            return base.Channel.GetBooks(authorName);
         }
         
-        public System.Threading.Tasks.Task<ClientProxy.LibraryServiceReference.Book[]> GetBooksAsync(string bookAuthor) {
-            return base.Channel.GetBooksAsync(bookAuthor);
+        public System.Threading.Tasks.Task<Client.LibraryServiceReference.Book[]> GetBooksAsync(string authorName) {
+            return base.Channel.GetBooksAsync(authorName);
         }
         
         public void TakeBook(int bookId) {
