@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ServiceModel;
+using System.ServiceModel.Web;
 
 namespace Server
 {
@@ -10,31 +11,27 @@ namespace Server
         void OnSaveChanges();
     }
 
-    [ServiceContract(CallbackContract = typeof(ISaveChangesOperationCallback), SessionMode = SessionMode.Required)]
+    [ServiceContract]
     public interface ILibraryService
     {
-        [OperationContract(IsInitiating = true, IsTerminating = false)]
-        void EnterLibrary(int userId, string userName);
-
-        [OperationContract(IsInitiating = false)]
+        [OperationContract]
+        [WebInvoke(UriTemplate = "/add", Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         void AddBook(Book book);
 
-        [OperationContract(IsInitiating = false)]
-        Book GetBook(int bookId);
+        [OperationContract]
+        [WebGet(UriTemplate = "/book/{bookId}", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        Book GetBook(string bookId);
 
-        [OperationContract(IsInitiating = false)]
+        [OperationContract]
+        [WebGet(UriTemplate = "/books/{authorName}", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         IEnumerable<Book> GetBooks(string authorName);
 
-        [OperationContract(IsInitiating = false)]
-        void TakeBook(int bookId);
+        [OperationContract]
+        [WebGet(UriTemplate = "/take/{bookId}/{userId}/{userName}", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        void TakeBook(string userId, string userName, string bookId);
 
-        [OperationContract(IsInitiating = false)]
-        void ReturnBook(int bookId);
-
-        [OperationContract(IsInitiating = false, IsOneWay = true)]
-        void SaveChanges();
-
-        [OperationContract(IsInitiating = false, IsTerminating = true, IsOneWay = true)]
-        void Leave();
+        [OperationContract]
+        [WebGet(UriTemplate = "/return/{bookId}/{userId}/{userName}", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        void ReturnBook(string userId, string userName, string bookId);
     }
 }

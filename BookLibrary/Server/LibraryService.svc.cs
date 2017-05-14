@@ -36,34 +36,22 @@ namespace Server
         };
     }
 
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
+    [ServiceBehavior]
     public class LibraryService : ILibraryService
     {
         private const int MaxBooksInOneHands = 5;
 
         private static readonly BookStorage Storage = new BookStorage();
-        private UserInfo _currentUser;
-        private readonly List<int> _returnedBooks = new List<int>();
-        private readonly List<int> _takenBooks = new List<int>();
-        private ISaveChangesOperationCallback Callback => OperationContext.Current.GetCallbackChannel<ISaveChangesOperationCallback>();
 
         public void AddBook(Book book)
         {
             Storage.BookList.Add(book);
         }
 
-        public void EnterLibrary(int userId, string userName)
+        public Book GetBook(string bookId)
         {
-            _currentUser = new UserInfo
-            {
-                Id = userId,
-                Name = userName
-            };
-        }
-
-        public Book GetBook(int bookId)
-        {
-            var book = Storage.BookList.FirstOrDefault(x => x.Id == bookId);
+            var parsed = int.Parse(bookId);
+            var book = Storage.BookList.FirstOrDefault(x => x.Id == parsed);
             if (book == null)
             {
                 throw new FaultException("Книга не найдена");
@@ -76,62 +64,31 @@ namespace Server
             return Storage.BookList.Where(x => x.Author == authorName);
         }
 
-        public void Leave() { }
-
-        public void ReturnBook(int bookId)
+        public void TakeBook(string userId, string userName, string bookId)
         {
-            var book = Storage.BookList.FirstOrDefault(x => x.Id == bookId);
-            if (book == null)
+            var parsedUserId = int.Parse(userId);
+            var parsedBookId = int.Parse(bookId);
+            var book = Storage.BookList.FirstOrDefault(x => x.Id == parsedBookId);
+            if (book == null || book.Taken || Storage.BookList.Count(x => x.Taken && x.TakerInfo.Id == parsedUserId) >= MaxBooksInOneHands)
             {
-                throw new FaultException("Книга не найдена");
+                throw new Exception("Всё плохо");
             }
-            if (!book.Taken)
-            {
-                throw new FaultException("Книга не была ранее взята из библиотеки");
-            }
-            if (book.TakerInfo.Id != _currentUser.Id)
-            {
-                throw new FaultException("Не ты брал эту книгу из библиотеки");
-            }
-            _returnedBooks.Add(bookId);
+            book.Taken = true;
+            book.TakenDateTime = DateTime.Now;
+            book.TakerInfo = new UserInfo {Id = parsedUserId, Name = userName};
         }
 
-        public void SaveChanges()
+        public void ReturnBook(string userId, string userName, string bookId)
         {
-            foreach (var book in Storage.BookList.Where(x => _returnedBooks.Contains(x.Id)))
+            var parsedUserId = int.Parse(userId);
+            var parsedBookId = int.Parse(bookId);
+            var book = Storage.BookList.FirstOrDefault(x => x.Id == parsedBookId);
+            if (book == null || !book.Taken || book.TakerInfo.Id != parsedUserId)
             {
-                book.Taken = false;
-                book.TakerInfo = null;
+                throw new Exception("Всё плохо");
             }
-            foreach (var book in Storage.BookList.Where(x => _takenBooks.Contains(x.Id)))
-            {
-                book.TakenDateTime = DateTime.Now;
-                book.Taken = true;
-                book.TakerInfo = _currentUser;
-            }
-            //if (Storage.BookList.Any(x => x.Taken && x.TakerInfo.Id == _currentUser.Id
-            //    && (DateTime.Now - x.TakenDateTime) > TimeSpan.FromDays(30)))
-            {
-                Callback.OnSaveChanges();
-            }
-        }
-
-        public void TakeBook(int bookId)
-        {
-            var book = Storage.BookList.FirstOrDefault(x => x.Id == bookId);
-            if (book == null)
-            {
-                throw new FaultException("Книга не найдена");
-            }
-            if (book.Taken)
-            {
-                throw new FaultException("Эту книгу уже кто-то взял");
-            }
-            if (Storage.BookList.Count(x => x.Taken && x.TakerInfo.Id == _currentUser.Id) >= MaxBooksInOneHands)
-            {
-                throw new FaultException("У тебя и так дофига книг");
-            }
-            _takenBooks.Add(bookId);
+            book.Taken = false;
+            book.TakerInfo = null;
         }
     }
 }
