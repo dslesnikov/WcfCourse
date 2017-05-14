@@ -1,4 +1,4 @@
-﻿namespace Server
+namespace LibraryServiceWeb.Models
 {
     public class UserInfo
     {
